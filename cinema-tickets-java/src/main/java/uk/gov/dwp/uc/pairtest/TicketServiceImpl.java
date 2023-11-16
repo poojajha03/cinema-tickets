@@ -93,10 +93,10 @@ public class TicketServiceImpl implements TicketService {
     }
 
     /**
-     * Validates if account is a valid account.
-     * All accounts with an id greater than zero are valid.
+     * Validates if valid max ticket count is provided.
+     * Only a maximum of 20 tickets that can be purchased at a time.
      *
-     * @return  True if the account is valid, false otherwise
+     * @return  True if the max ticket count is valid, false otherwise
      */
     private boolean maxTicketBookingValidation(final TicketTypeRequest... ticketTypeRequests) {
         int totalTicketCount = Arrays.stream(ticketTypeRequests)
