@@ -79,7 +79,7 @@ public class TicketServiceImpl implements TicketService {
         }
 
         log.info("Booking reservation complete.");
-   }
+    }
 
     /**
      * Validates if account is a valid account.
@@ -108,7 +108,7 @@ public class TicketServiceImpl implements TicketService {
             }
         }
         // Check if max ticket count has exceeded
-      return totalTicketCount <= MAX_TICKET_ALLOWED;
+        return totalTicketCount <= MAX_TICKET_ALLOWED;
 
     }
 
@@ -140,10 +140,9 @@ public class TicketServiceImpl implements TicketService {
         double totalBookingAmount = 0;
         try {
             for (final TicketTypeRequest bookingRequest : ticketTypeRequests) {
-                final int noOfTickets = bookingRequest.getNoOfTickets();
-                final double ticketPrice = bookingRequest.getTicketType().getPrice();
-
-                totalBookingAmount += ticketPrice * noOfTickets;
+                totalBookingAmount = Arrays.stream(ticketTypeRequests)
+                        .mapToDouble(TicketTypeRequest::calculateCost)
+                        .sum();
             }
         } catch(InvalidPurchaseException e) {
             log.error("Problem in calculating total cost towards booking");
@@ -162,12 +161,10 @@ public class TicketServiceImpl implements TicketService {
     private int calTotalSeats(final TicketTypeRequest... ticketTypeRequests) {
         int totalSeatAllocation = 0;
         try {
-            for (final TicketTypeRequest ticketTypeRequest : ticketTypeRequests) {
-                final int noOfTickets = ticketTypeRequest.getNoOfTickets();
-                if (ticketTypeRequest.getTicketType().isSeatRequired()) {
-                    totalSeatAllocation += noOfTickets;
-                }
-            }
+            totalSeatAllocation = Arrays.stream(ticketTypeRequests)
+                    .filter(request -> request.getTicketType().isSeatRequired())
+                    .mapToInt(TicketTypeRequest::getNoOfTickets)
+                    .sum();
         } catch(InvalidPurchaseException e) {
             log.error("Problem in allocating seat");
             throw e;

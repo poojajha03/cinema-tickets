@@ -21,6 +21,14 @@ public class TicketTypeRequest {
     public Type getTicketType() {
         return type;
     }
+    /**
+     * Calculate the cost for the given number of tickets.
+     *
+     * @return the total cost for the request
+     */
+    public double calculateCost() {
+        return this.getNoOfTickets() * this.getTicketType().getPrice();
+    }
 
     public enum Type {
         ADULT(20.0),
