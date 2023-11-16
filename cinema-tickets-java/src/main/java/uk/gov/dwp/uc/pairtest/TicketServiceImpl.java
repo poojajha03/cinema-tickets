@@ -99,14 +99,10 @@ public class TicketServiceImpl implements TicketService {
      * @return  True if the account is valid, false otherwise
      */
     private boolean maxTicketBookingValidation(final TicketTypeRequest... ticketTypeRequests) {
-        int totalTicketCount = 0;
-
-        for (final TicketTypeRequest request : ticketTypeRequests) {
-            if (!Objects.isNull(request)) {
-                int requestedTicketCount = request.getNoOfTickets();
-                totalTicketCount += requestedTicketCount;
-            }
-        }
+        int totalTicketCount = Arrays.stream(ticketTypeRequests)
+                .filter(Objects::nonNull)
+                .mapToInt(TicketTypeRequest::getNoOfTickets)
+                .sum();
         // Check if max ticket count has exceeded
         return totalTicketCount <= MAX_TICKET_ALLOWED;
 
