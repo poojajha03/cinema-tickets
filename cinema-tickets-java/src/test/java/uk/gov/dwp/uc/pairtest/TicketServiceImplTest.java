@@ -172,7 +172,7 @@ public class TicketServiceImplTest {
      */
     @Test(expected = MaxTicketPurchaseException.class)
     public void testMaxTicketPurchaseAllowed() {
-        final TicketTypeRequest adultTicketRequest = createTicketRequest(Type.ADULT, 14);
+        final TicketTypeRequest adultTicketRequest = createTicketRequest(Type.ADULT, 15);
         final TicketTypeRequest childTicketRequest = createTicketRequest(Type.CHILD, 6);
         final TicketTypeRequest infantTicketRequest = createTicketRequest(Type.INFANT, 3);
         ticketService.purchaseTickets(VALID_ACCOUNT_ID, adultTicketRequest, childTicketRequest, infantTicketRequest);

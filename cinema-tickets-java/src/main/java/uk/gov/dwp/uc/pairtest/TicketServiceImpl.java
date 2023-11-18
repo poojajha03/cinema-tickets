@@ -99,10 +99,7 @@ public class TicketServiceImpl implements TicketService {
      * @return  True if the max ticket count is valid, false otherwise
      */
     private boolean maxTicketBookingValidation(final TicketTypeRequest... ticketTypeRequests) {
-        int totalTicketCount = Arrays.stream(ticketTypeRequests)
-                .filter(Objects::nonNull)
-                .mapToInt(TicketTypeRequest::getNoOfTickets)
-                .sum();
+        int totalTicketCount = calTotalSeats(ticketTypeRequests);
         // Check if max ticket count has exceeded
         return totalTicketCount <= MAX_TICKET_ALLOWED;
 
@@ -158,6 +155,7 @@ public class TicketServiceImpl implements TicketService {
         int totalSeatAllocation = 0;
         try {
             totalSeatAllocation = Arrays.stream(ticketTypeRequests)
+                    .filter(Objects::nonNull)
                     .filter(request -> request.getTicketType().isSeatRequired())
                     .mapToInt(TicketTypeRequest::getNoOfTickets)
                     .sum();
